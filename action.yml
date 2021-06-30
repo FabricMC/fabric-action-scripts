@@ -1,0 +1,17 @@
+name: Fabric Action Scripts
+description: Fabric specific github action scripts
+inputs:
+  context:
+    description: "Valid context: [yarn-update-base]"
+    required: true
+  github-token:
+    description: The GitHub token used to create an authenticated client
+    default: ${{ github.token }}
+    required: false
+  issue-number:
+    description: The Github issue number
+    default: ${{ github.event.number }}
+    required: false
+runs:
+  using: node12
+  main: index.js
