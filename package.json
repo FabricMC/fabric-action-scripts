@@ -7,8 +7,8 @@
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
-    "lint": "prettier --write ./src",
-    "check": "prettier --check ./src",
+    "lint": "npm run check -- --fix",
+    "check": "eslint \"./**/*.js\" \"./**/*.ts\" --ignore-path .gitignore",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest --coverage=true",
     "all": "npm run check && npm run build && npm run package && npm run test"
@@ -21,11 +21,42 @@
   "devDependencies": {
     "@octokit/types": "^6.17.2",
     "@types/jest": "^26.0.23",
+    "@typescript-eslint/eslint-plugin": "^4.28.1",
+    "@typescript-eslint/parser": "^4.28.1",
     "@vercel/ncc": "^0.28.6",
+    "eslint": "^7.29.0",
+    "eslint-config-haykam": "^1.10.0",
+    "eslint-plugin-extra-rules": "^0.0.0-development",
+    "eslint-plugin-html": "^6.1.2",
+    "eslint-plugin-jsdoc": "^32.3.4",
+    "eslint-plugin-json": "^2.1.2",
+    "eslint-plugin-markdown": "^2.2.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-unicorn": "^28.0.2",
     "jest": "^27.0.6",
     "nock": "^13.1.0",
-    "prettier": "2.3.2",
     "ts-jest": "^27.0.3",
     "typescript": "^4.3.4"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint-config-haykam",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "rules": {
+      "no-console": "off",
+      "camelcase": "off",
+      "jsdoc/require-jsdoc": "off",
+      "semi": "off",
+      "@typescript-eslint/semi": "error",
+      "no-shadow": "off",
+      "@typescript-eslint/no-shadow": "error",
+      "sort-imports": "error"
+    }
   }
 }
