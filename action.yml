@@ -12,6 +12,9 @@ inputs:
     description: The Github issue number
     default: ${{ github.event.number }}
     required: false
+outputs:
+  changelog:
+    description: "The generated changelog"
 runs:
   using: node12
   main: index.js
