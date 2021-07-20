@@ -26,4 +26,7 @@ async function main(): Promise<void> {
   }
 }
 
-main();
+main().catch((e: Error) => {
+  console.error(e);
+  core.setFailed(e.message)
+})
