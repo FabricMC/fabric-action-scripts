@@ -20,7 +20,7 @@ export async function generateChangelog(
     workflow_id,
     branch: context.ref.split("/").pop(),
     per_page: 1,
-    status: "completed",
+    status: "success",
   });
 
   let changelog: string;
