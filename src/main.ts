@@ -19,7 +19,10 @@ async function main(): Promise<void> {
       );
       break;
     case "changelog":
-      await generateChangelog(github.rest);
+      await generateChangelog(
+        github.rest,
+        core.getInput("workflow_id", { required: true })
+      );
       break;
     default:
       throw new Error("Unknown context: " + context);

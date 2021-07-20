@@ -8,6 +8,9 @@ inputs:
     description: The GitHub token used to create an authenticated client
     default: ${{ github.token }}
     required: false
+  workflow_id:
+    description: The workflow id of the action, usually the filename.
+    required: false
   issue-number:
     description: The Github issue number
     default: ${{ github.event.number }}

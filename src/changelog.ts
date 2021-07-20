@@ -6,14 +6,17 @@ import { gitLog } from "./git-utils";
 
 type WorkflowRun = components["schemas"]["workflow-run"];
 
-export async function generateChangelog(github: RestEndpointMethods) {
+export async function generateChangelog(
+  github: RestEndpointMethods,
+  workflow_id: string
+) {
   const owner = context.repo.owner;
   const repo = context.repo.repo;
   const baseRequest = { owner, repo };
 
   console.log("Generating changelog");
   console.log({
-    workflow_id: context.action,
+    workflow_id,
     branch: context.ref,
   });
 
