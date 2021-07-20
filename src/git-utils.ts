@@ -1,4 +1,5 @@
 import { exec } from "@actions/exec";
+import { which } from "@actions/io";
 
 export async function gitLog(
   previousCommit: string,
@@ -13,7 +14,7 @@ export async function gitLog(
 
 async function git(args: string[]): Promise<string> {
   let output = "";
-  let exitCode = await exec("git", args, {
+  let exitCode = await exec(await which("git", true), args, {
     listeners: {
       stdout: (data: Buffer) => {
         output += data.toString();
