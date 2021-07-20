@@ -7,7 +7,7 @@ export async function gitLog(
 ): Promise<string> {
   return git([
     "log",
-    '--pretty="- %s (%an)"', // TODO expose the format so it can be changed? See https://git-scm.com/docs/pretty-formats
+    "--pretty=- %s (%an)", // TODO expose the format so it can be changed? See https://git-scm.com/docs/pretty-formats
     `${previousCommit}..${releaseCommit}`,
   ]);
 }
