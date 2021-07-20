@@ -7658,7 +7658,10 @@ async function getLabels(github, issue_number) {
 
 // EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
 var exec = __nccwpck_require__(1514);
+// EXTERNAL MODULE: ./node_modules/@actions/io/lib/io.js
+var io = __nccwpck_require__(7436);
 ;// CONCATENATED MODULE: ./lib/git-utils.js
+
 
 async function gitLog(previousCommit, releaseCommit) {
     return git([
@@ -7669,7 +7672,7 @@ async function gitLog(previousCommit, releaseCommit) {
 }
 async function git(args) {
     let output = "";
-    let exitCode = await (0,exec.exec)("git", args, {
+    let exitCode = await (0,exec.exec)(await (0,io.which)("git", true), args, {
         listeners: {
             stdout: (data) => {
                 output += data.toString();
