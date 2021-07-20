@@ -1,6 +1,7 @@
 import * as core from "@actions/core";
 import { getOctokit } from "@actions/github";
 import { yarnUpdateBase } from "./yarn-update-base";
+import { generateChangelog } from "./changelog";
 
 async function main(): Promise<void> {
   const token = core.getInput("github-token", { required: true });
@@ -12,9 +13,15 @@ async function main(): Promise<void> {
 
   switch (context) {
     case "yarn-update-base":
-      yarnUpdateBase(
+      await yarnUpdateBase(
         github.rest,
         parseInt(core.getInput("issue-number", { required: true }))
+      );
+      break;
+    case "changelog":
+      await generateChangelog(
+        github.rest,
+        core.getInput("workflow_id", { required: true })
       );
       break;
     default:
@@ -22,4 +29,7 @@ async function main(): Promise<void> {
   }
 }
 
-main();
+main().catch((e: Error) => {
+  console.error(e);
+  core.setFailed(e.message);
+});
