@@ -13,7 +13,7 @@ export async function generateChangelog(github: RestEndpointMethods) {
 
   console.log("Generating changelog");
   console.log({
-    workflow_id: context.workflow,
+    workflow_id: context.action,
     branch: context.ref,
   });
 
@@ -21,7 +21,7 @@ export async function generateChangelog(github: RestEndpointMethods) {
   let request = await github.actions.listWorkflowRuns({
     ...baseRequest,
     workflow_id: context.workflow,
-    branch: context.ref, // TODO check this
+    branch: context.ref.split("/").pop(),
     per_page: 1,
     status: "completed",
   });
