@@ -5,11 +5,13 @@ export async function gitLog(
   previousCommit: string,
   releaseCommit: string
 ): Promise<string> {
-  return git([
+  const log = await git([
     "log",
-    "--pretty=- %s (%an)", // TODO expose the format so it can be changed? See https://git-scm.com/docs/pretty-formats
+    "--pretty=- %s (%an, %(trailers:key=Co-authored-by,valueonly,separator=%x2C ))", // TODO expose the format so it can be changed? See https://git-scm.com/docs/pretty-formats
     `${previousCommit}..${releaseCommit}`,
   ]);
+
+  return log.replace(/ <.+?>/g, "").replace(/, \)/g, ")");
 }
 
 async function git(args: string[]): Promise<string> {
