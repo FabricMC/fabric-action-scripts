@@ -7664,11 +7664,12 @@ var io = __nccwpck_require__(7436);
 
 
 async function gitLog(previousCommit, releaseCommit) {
-    return git([
+    const log = await git([
         "log",
-        "--pretty=- %s (%an)",
+        "--pretty=- %s (%an, %(trailers:key=Co-authored-by,valueonly,separator=%x2C ))",
         `${previousCommit}..${releaseCommit}`,
     ]);
+    return log.replace(/ <.+?>/g, "").replace(/, \)/g, ")");
 }
 async function git(args) {
     let output = "";
