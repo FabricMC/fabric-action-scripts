@@ -8,7 +8,8 @@ type WorkflowRun = components["schemas"]["workflow-run"];
 
 export async function generateChangelog(
   github: RestEndpointMethods,
-  workflow_id: string
+  workflow_id: string,
+  commit_regex: string
 ) {
   const owner = context.repo.owner;
   const repo = context.repo.repo;
@@ -31,7 +32,7 @@ export async function generateChangelog(
   } else if (runs.length > 1) {
     throw new Error("Return more runs than expected!");
   } else {
-    changelog = await generateChangelogSinceRun(runs[0]);
+    changelog = await generateChangelogSinceRun(runs[0], commit_regex);
   }
 
   console.log(changelog);
@@ -39,7 +40,8 @@ export async function generateChangelog(
 }
 
 async function generateChangelogSinceRun(
-  lastRun: WorkflowRun
+  lastRun: WorkflowRun,
+  commit_regex: string
 ): Promise<string> {
   let previousCommit = lastRun.head_commit?.id;
   let releaseCommit = context.sha;
@@ -58,5 +60,13 @@ async function generateChangelogSinceRun(
     return "No changes";
   }
 
-  return gitLog(previousCommit, releaseCommit);
+  let log = await gitLog(previousCommit, releaseCommit);
+  if (commit_regex) {
+    let reg = new RegExp(commit_regex);
+    return log
+      .split("\n")
+      .filter((val) => !reg.test(val.substr(2))) // We start at index 2 to ignore the "-" char
+      .join("\n");
+  }
+  return log;
 }

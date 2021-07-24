@@ -21,7 +21,8 @@ async function main(): Promise<void> {
     case "changelog":
       await generateChangelog(
         github.rest,
-        core.getInput("workflow_id", { required: true })
+        core.getInput("workflow_id", { required: true }),
+        core.getInput("commit_regex", { required: false })
       );
       break;
     default:
