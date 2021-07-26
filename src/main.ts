@@ -1,4 +1,6 @@
 import * as core from "@actions/core";
+
+import { generateChangelog } from "./changelog";
 import { getOctokit } from "@actions/github";
 import { yarnUpdateBase } from "./yarn-update-base";
 
@@ -17,9 +19,18 @@ async function main(): Promise<void> {
 				parseInt(core.getInput("issue-number", { required: true })),
 			);
 			break;
+		case "changelog":
+			await generateChangelog(
+				github.rest,
+				core.getInput("workflow_id", { required: true }),
+			);
+			break;
 		default:
 			throw new Error("Unknown context: " + context);
 	}
 }
 
-main();
+main().catch((error: Error) => {
+	console.error(error);
+	core.setFailed(error.message);
+});
