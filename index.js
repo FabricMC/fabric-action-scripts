@@ -7605,19 +7605,7 @@ async function yarnUpdateBase(github, issue_number) {
         ...pullRequest,
     });
     labels.delete("update-base");
-    if (pull.base.ref == base) {
-        await github.issues.createComment({
-            ...issueRequest,
-            body: "🚨 Target branch is already set to " + base,
-        });
-    }
-    else {
-        // Update the base (target) branch
-        await github.pulls.update({ ...pullRequest, base });
-        await github.issues.createComment({
-            ...issueRequest,
-            body: "🚀 Target branch has been updated to " + base,
-        });
+    const rebase = async () => {
         try {
             // Updates the pull request with the latest upstream changes.
             await github.pulls.updateBranch({ ...pullRequest });
@@ -7635,6 +7623,22 @@ async function yarnUpdateBase(github, issue_number) {
                 throw error;
             }
         }
+    };
+    if (pull.base.ref == base) {
+        await github.issues.createComment({
+            ...issueRequest,
+            body: "🎉 Target branch is already set to " + base,
+        });
+        await rebase();
+    }
+    else {
+        // Update the base (target) branch
+        await github.pulls.update({ ...pullRequest, base });
+        await github.issues.createComment({
+            ...issueRequest,
+            body: "🚀 Target branch has been updated to " + base,
+        });
+        await rebase();
         labels.delete("snapshot");
         labels.delete("release");
         const snapshot = base.includes("-") || base.includes("w");
