@@ -83,8 +83,9 @@ test("Base already updated", async () => {
   expectGetLabels(["update-base"]);
   expectGetRepo("1.17");
   expectGetPull("1.17");
-  expectComment("🚨 Target branch is already set to 1.17");
+  expectComment("🎉 Target branch is already set to 1.17");
   expectSetLabels([]);
+  expectRebase();
 
   await yarnUpdateBase(github.rest, 0);
 });
@@ -93,8 +94,9 @@ test("Base already updated, existing labels", async () => {
   expectGetLabels(["update-base", "another-label"]);
   expectGetRepo("1.17");
   expectGetPull("1.17");
-  expectComment("🚨 Target branch is already set to 1.17");
+  expectComment("🎉 Target branch is already set to 1.17");
   expectSetLabels(["another-label"]);
+  expectRebase();
 
   await yarnUpdateBase(github.rest, 0);
 });
