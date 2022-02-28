@@ -7695,7 +7695,7 @@ async function git(args) {
 
 
 
-async function generateChangelog(github, workflow_id) {
+async function generateChangelog(github, workflow_id, commit_regex) {
     const owner = lib_github.context.repo.owner;
     const repo = lib_github.context.repo.repo;
     const baseRequest = { owner, repo };
@@ -7716,12 +7716,12 @@ async function generateChangelog(github, workflow_id) {
         throw new Error("Return more runs than expected!");
     }
     else {
-        changelog = await generateChangelogSinceRun(runs[0]);
+        changelog = await generateChangelogSinceRun(runs[0], commit_regex);
     }
     console.log(changelog);
     (0,core.setOutput)("changelog", changelog);
 }
-async function generateChangelogSinceRun(lastRun) {
+async function generateChangelogSinceRun(lastRun, commit_regex) {
     var _a;
     let previousCommit = (_a = lastRun.head_commit) === null || _a === void 0 ? void 0 : _a.id;
     let releaseCommit = lib_github.context.sha;
@@ -7736,7 +7736,15 @@ async function generateChangelogSinceRun(lastRun) {
         console.log("Previous commit is equal to current commit");
         return "No changes";
     }
-    return gitLog(previousCommit, releaseCommit);
+    let log = await gitLog(previousCommit, releaseCommit);
+    if (commit_regex) {
+        let reg = new RegExp(commit_regex);
+        return log
+            .split("\n")
+            .filter((val) => !reg.test(val.substr(2))) // We start at index 2 to ignore the "-" char
+            .join("\n");
+    }
+    return log;
 }
 
 ;// CONCATENATED MODULE: ./lib/main.js
@@ -7754,7 +7762,7 @@ async function main() {
             await yarnUpdateBase(github.rest, parseInt(core.getInput("issue-number", { required: true })));
             break;
         case "changelog":
-            await generateChangelog(github.rest, core.getInput("workflow_id", { required: true }));
+            await generateChangelog(github.rest, core.getInput("workflow_id", { required: true }), core.getInput("commit_regex", { required: false }));
             break;
         default:
             throw new Error("Unknown context: " + context);
