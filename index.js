@@ -9939,25 +9939,81 @@ async function generateChangelogSinceRun(lastRun, commit_regex) {
     return log;
 }
 
+;// CONCATENATED MODULE: ./lib/labels.js
+
+const labels = {
+    support: "👋 We use the issue tracker exclusively for final bug reports and feature requests. However, this issue appears to be better suited for either a [discussion thread](https://github.com/orgs/FabricMC/discussions), or a message on [our discord server](https://discord.gg/v6v4pMv). Please post your request on one of these, and the conversation can continue there.",
+};
+// Add a comment and close the issue when a specific label is present.
+async function labeled(github, label) {
+    if (!labels[label]) {
+        return;
+    }
+    const owner = lib_github.context.repo.owner;
+    const repo = lib_github.context.repo.repo;
+    const issue_number = lib_github.context.issue.number;
+    await github.issues.createComment({
+        owner,
+        repo,
+        issue_number,
+        body: labels[label],
+    });
+    await updateState(github, "closed");
+}
+// Reopen a closed issue when the label is removed.
+async function unlabeled(github, label) {
+    if (!labels[label]) {
+        return;
+    }
+    await updateState(github, "open");
+}
+async function updateState(github, state) {
+    const owner = lib_github.context.repo.owner;
+    const repo = lib_github.context.repo.repo;
+    const issue_number = lib_github.context.issue.number;
+    const issue = await github.issues.get({
+        owner,
+        repo,
+        issue_number,
+    });
+    if (issue.data.state == state) {
+        // Nothing to do.
+        return;
+    }
+    await github.issues.update({
+        owner,
+        repo,
+        issue_number,
+        state: state,
+    });
+}
+
 ;// CONCATENATED MODULE: ./lib/main.js
+
 
 
 
 
 async function main() {
     const token = core.getInput("github-token", { required: true });
-    const context = core.getInput("context", { required: true });
+    const ctx = core.getInput("context", { required: true });
     const github = (0,lib_github.getOctokit)(token, {});
-    console.log("Fabric Actions Script, context: " + context);
-    switch (context) {
+    console.log("Fabric Actions Script, context: " + ctx);
+    switch (ctx) {
         case "yarn-update-base":
-            await yarnUpdateBase(github.rest, parseInt(core.getInput("issue-number", { required: true })));
+            await yarnUpdateBase(github.rest, lib_github.context.issue.number);
             break;
         case "changelog":
             await generateChangelog(github.rest, core.getInput("workflow_id", { required: true }), core.getInput("commit_regex", { required: false }));
             break;
+        case "labeled":
+            await labeled(github.rest, core.getInput("label", { required: true }));
+            break;
+        case "unlabeled":
+            await unlabeled(github.rest, core.getInput("label", { required: true }));
+            break;
         default:
-            throw new Error("Unknown context: " + context);
+            throw new Error("Unknown context: " + ctx);
     }
 }
 main().catch((e) => {

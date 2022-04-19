@@ -2,7 +2,7 @@ name: Fabric Action Scripts
 description: Fabric specific github action scripts
 inputs:
   context:
-    description: "Valid context: [yarn-update-base]"
+    description: "Valid context: [yarn-update-base | changelog | labeled | unlabeled]"
     required: true
   github-token:
     description: The GitHub token used to create an authenticated client
@@ -17,6 +17,9 @@ inputs:
     required: false
   commit_regex:
     description: A regular expression used to filter out commits.
+    required: false
+  label:
+    description: The label name for use with the labeled or unlabeled scripts.
     required: false
 outputs:
   changelog:
