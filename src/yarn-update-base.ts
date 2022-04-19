@@ -30,7 +30,7 @@ export async function yarnUpdateBase(
     try {
       // Updates the pull request with the latest upstream changes.
       await github.pulls.updateBranch({ ...pullRequest });
-    } catch (error) {
+    } catch (error: any) {
       // 422 is returned when there is a merge conflict
       if (error.status === 422) {
         await github.issues.createComment({

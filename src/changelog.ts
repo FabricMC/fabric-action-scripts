@@ -1,7 +1,7 @@
 import { context } from "@actions/github";
 import { setOutput } from "@actions/core";
 import { RestEndpointMethods } from "@octokit/plugin-rest-endpoint-methods/dist-types/generated/method-types";
-import { components } from "@octokit/openapi-types/generated/types";
+import { components } from "@octokit/openapi-types/types";
 import { gitLog } from "./git-utils";
 
 type WorkflowRun = components["schemas"]["workflow-run"];
