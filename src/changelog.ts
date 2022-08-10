@@ -28,7 +28,7 @@ export async function generateChangelog(
 
   let runs = await request.data.workflow_runs;
   if (runs.length == 0) {
-    changelog = "Inital release";
+    changelog = "Initial release";
   } else if (runs.length > 1) {
     throw new Error("Return more runs than expected!");
   } else {
