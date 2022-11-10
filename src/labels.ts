@@ -59,5 +59,7 @@ async function updateState(
     repo,
     issue_number,
     state: state,
+    // Mark issue as not planned when closed
+    ...(state == "closed" ? { state_reason: "not_planned" } : {}),
   });
 }
