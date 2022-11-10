@@ -39,6 +39,11 @@ export async function yarnUpdateBase(
         });
 
         labels.add("outdated");
+      } else if (error.status == 403) {
+        await github.issues.createComment({
+          ...issueRequest,
+          body: "🚨 Unable to automatically update branch with the latest changes",
+        });
       } else {
         throw error;
       }
