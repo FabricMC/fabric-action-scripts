@@ -1,7 +1,6 @@
 import {
   releaseLabel,
   snapshotLabel,
-  experimentalLabel,
   yarnVersionLabel,
 } from "./yarn-version-label";
 import { GitHub } from "@actions/github/lib/utils";
@@ -13,13 +12,11 @@ process.env.GITHUB_REPOSITORY = "test/repo";
 const github = new GitHub();
 
 const versionsToLabels = {
-  "1.16_combat-3": experimentalLabel,
   "21w20a": snapshotLabel,
   "1.17": releaseLabel,
   "1.17.1-pre1": snapshotLabel,
   "1.17.1-rc1": snapshotLabel,
   "1.17.1": releaseLabel,
-  "1.18_experimental-snapshot-1": experimentalLabel,
 };
 
 for (const [version, label] of Object.entries(versionsToLabels)) {

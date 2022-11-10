@@ -4,7 +4,6 @@ import { arraysEqual, getLabels } from "./label-utils";
 
 export const releaseLabel = "release";
 export const snapshotLabel = "snapshot";
-export const experimentalLabel = "experimental";
 
 export async function yarnVersionLabel(
   github: RestEndpointMethods,
@@ -20,7 +19,6 @@ export async function yarnVersionLabel(
 
   newLabels.delete(releaseLabel);
   newLabels.delete(snapshotLabel);
-  newLabels.delete(experimentalLabel);
 
   const { data: pull } = await github.pulls.get({
     ...baseRequest,
@@ -28,9 +26,7 @@ export async function yarnVersionLabel(
   });
 
   const ref = pull.base.ref;
-  if (ref.includes("combat") || ref.includes("experimental")) {
-    newLabels.add(experimentalLabel);
-  } else if (ref.includes("-") || ref.includes("w")) {
+  if (ref.includes("-") || ref.includes("w")) {
     newLabels.add(snapshotLabel);
   } else {
     newLabels.add(releaseLabel);
