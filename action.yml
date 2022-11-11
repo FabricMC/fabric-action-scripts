@@ -25,5 +25,5 @@ outputs:
   changelog:
     description: "The generated changelog"
 runs:
-  using: node12
+  using: node16
   main: index.js
