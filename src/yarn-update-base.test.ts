@@ -1,73 +1,19 @@
 import { yarnUpdateBase } from "./yarn-update-base";
 import { GitHub } from "@actions/github/lib/utils";
 import nock from "nock";
+import {
+  expectGetLabels,
+  expectGetRepo,
+  expectGetPull,
+  expectComment,
+  expectSetLabels,
+  expectSetBase,
+  expectRebase,
+} from "./test-utils";
 
 nock.disableNetConnect();
 process.env.GITHUB_REPOSITORY = "test/repo";
 const github = new GitHub();
-
-function arraysEqual(a1: unknown, a2: unknown) {
-  return JSON.stringify(a1) == JSON.stringify(a2);
-}
-
-function expectGetLabels(labels: string[]) {
-  nock("https://api.github.com")
-    .get("/repos/test/repo/issues/0/labels")
-    .reply(
-      200,
-      labels.map((name) => {
-        return {
-          name,
-        };
-      })
-    );
-}
-
-function expectSetLabels(labels: string[]) {
-  nock("https://api.github.com")
-    .put("/repos/test/repo/issues/0/labels", (body) => {
-      return arraysEqual(body.labels, labels);
-    })
-    .reply(200, {});
-}
-
-function expectGetRepo(defaultBranch: string) {
-  nock("https://api.github.com").get("/repos/test/repo").reply(200, {
-    default_branch: defaultBranch,
-  });
-}
-
-function expectGetPull(baseBranch: string) {
-  nock("https://api.github.com")
-    .get("/repos/test/repo/pulls/0")
-    .reply(200, {
-      base: {
-        ref: baseBranch,
-      },
-    });
-}
-
-function expectComment(comment: string) {
-  nock("https://api.github.com")
-    .post("/repos/test/repo/issues/0/comments", (body) => {
-      return body.body == comment;
-    })
-    .reply(200, {});
-}
-
-function expectSetBase(baseBranch: string) {
-  nock("https://api.github.com")
-    .patch("/repos/test/repo/pulls/0", (body) => {
-      return body.base == baseBranch;
-    })
-    .reply(200, {});
-}
-
-function expectRebase(returnCode = 200) {
-  nock("https://api.github.com")
-    .put("/repos/test/repo/pulls/0/update-branch")
-    .reply(returnCode, {});
-}
 
 test("No labels", async () => {
   expectGetLabels([]);

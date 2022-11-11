@@ -26,7 +26,7 @@ export async function generateChangelog(
 
   let changelog: string;
 
-  let runs = await request.data.workflow_runs;
+  let runs = request.data.workflow_runs as WorkflowRun[];
   if (runs.length == 0) {
     changelog = "Initial release";
   } else if (runs.length > 1) {

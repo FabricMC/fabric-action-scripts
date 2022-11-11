@@ -1,6 +1,7 @@
 import * as core from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import { yarnUpdateBase } from "./yarn-update-base";
+import { yarnVersionLabel } from "./yarn-version-label";
 import { generateChangelog } from "./changelog";
 import { labeled, unlabeled } from "./labels";
 
@@ -15,6 +16,12 @@ async function main(): Promise<void> {
   switch (ctx) {
     case "yarn-update-base":
       await yarnUpdateBase(github.rest, context.issue.number);
+      break;
+    case "yarn-version-label":
+      await yarnVersionLabel(
+        github.rest,
+        parseInt(core.getInput("issue-number", { required: true }))
+      );
       break;
     case "changelog":
       await generateChangelog(
