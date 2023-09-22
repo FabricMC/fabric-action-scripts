@@ -20,14 +20,14 @@ async function main(): Promise<void> {
     case "yarn-version-label":
       await yarnVersionLabel(
         github.rest,
-        parseInt(core.getInput("issue-number", { required: true }))
+        parseInt(core.getInput("issue-number", { required: true })),
       );
       break;
     case "changelog":
       await generateChangelog(
         github.rest,
         core.getInput("workflow_id", { required: true }),
-        core.getInput("commit_regex", { required: false })
+        core.getInput("commit_regex", { required: false }),
       );
       break;
 

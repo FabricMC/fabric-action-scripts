@@ -37,7 +37,7 @@ export async function unlabeled(github: RestEndpointMethods, label: string) {
 
 async function updateState(
   github: RestEndpointMethods,
-  state: "open" | "closed"
+  state: "open" | "closed",
 ) {
   const owner = context.repo.owner;
   const repo = context.repo.repo;

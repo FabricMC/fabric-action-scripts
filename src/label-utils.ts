@@ -7,7 +7,7 @@ export function arraysEqual(a1: unknown, a2: unknown) {
 
 export async function getLabels(
   github: RestEndpointMethods,
-  issue_number: number
+  issue_number: number,
 ): Promise<Set<string>> {
   const resp = await github.issues.listLabelsOnIssue({
     owner: context.repo.owner,

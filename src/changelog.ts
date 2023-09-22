@@ -9,7 +9,7 @@ type WorkflowRun = components["schemas"]["workflow-run"];
 export async function generateChangelog(
   github: RestEndpointMethods,
   workflow_id: string,
-  commit_regex: string
+  commit_regex: string,
 ) {
   const owner = context.repo.owner;
   const repo = context.repo.repo;
@@ -41,7 +41,7 @@ export async function generateChangelog(
 
 async function generateChangelogSinceRun(
   lastRun: WorkflowRun,
-  commit_regex: string
+  commit_regex: string,
 ): Promise<string> {
   let previousCommit = lastRun.head_commit?.id;
   let releaseCommit = context.sha;

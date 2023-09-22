@@ -7,7 +7,7 @@ export const snapshotLabel = "snapshot";
 
 export async function yarnVersionLabel(
   github: RestEndpointMethods,
-  issue_number: number
+  issue_number: number,
 ) {
   const owner = context.repo.owner;
   const repo = context.repo.repo;
@@ -42,6 +42,6 @@ export async function yarnVersionLabel(
   await github.issues.setLabels({
     ...baseRequest,
     issue_number,
-    labels: newLabelsArray as any,
+    labels: newLabelsArray,
   });
 }
