@@ -3,7 +3,7 @@ import { which } from "@actions/io";
 
 export async function gitLog(
   previousCommit: string,
-  releaseCommit: string
+  releaseCommit: string,
 ): Promise<string> {
   const log = await git([
     "log",

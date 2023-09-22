@@ -10,7 +10,7 @@ export function expectGetLabels(labels: string[]) {
         return {
           name,
         };
-      })
+      }),
     );
 }
 

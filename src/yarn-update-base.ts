@@ -4,7 +4,7 @@ import { getLabels } from "./label-utils";
 
 export async function yarnUpdateBase(
   github: RestEndpointMethods,
-  issue_number: number
+  issue_number: number,
 ) {
   const owner = context.repo.owner;
   const repo = context.repo.repo;
@@ -78,6 +78,6 @@ export async function yarnUpdateBase(
   const distictLabels: string[] = [...labels];
   await github.issues.setLabels({
     ...issueRequest,
-    labels: distictLabels as any, // TODO are the types wrong here or something?
+    labels: distictLabels,
   });
 }
