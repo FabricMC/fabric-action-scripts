@@ -6,13 +6,13 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
-      - uses: actions/checkout@v4
+          node-version: 24
+      - uses: actions/checkout@v6
         with:
           ref: dist
           path: dist
@@ -33,6 +33,6 @@ jobs:
           git config user.email github-actions@github.com
           git add . --force
           git commit --allow-empty -m "Update $GITHUB_SHA"
-          git tag -f -a -m "Update $GITHUB_SHA" v2
+          git tag -f -a -m "Update $GITHUB_SHA" v3
           git push
           git push --tags -f
